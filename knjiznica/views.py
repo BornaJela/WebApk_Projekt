@@ -107,7 +107,9 @@ def moje_posudbe(request):
         'aktivne_posudbe':aktivne_posudbe,'povijest_posudbi':povijest_posudbi,
     })
 def is_zaposlenik(user):
-    return user.is_authenticated and user.is_staff
+    return user.is_authenticated and (
+        user.is_staff or
+        (hasattr(user,'profile') and user.profile.je_zaposlenik))
 @login_required
 @user_passes_test(is_zaposlenik)
 def statistika(request):

@@ -19,6 +19,9 @@
                         <a class="nav-link" href="{% url 'dodaj_knjigu' %}">Dodaj knjigu</a>
                         <a class="nav-link" href="{% url 'statistika' %}">Statistika</a>
                     {% endif %}
+                    {% if user.profile.je_zaposlenik %}
+                        <a class="nav-link" href="{% url 'statistika' %}">Statistika</a>
+                    {%endif%}
                     <form method="post" action="{% url 'logout' %}" class="d-inline">
                         {% csrf_token %}
                         <button class="btn btn-outline-light btn-sm my-2" type="submit">Odjava</button>
