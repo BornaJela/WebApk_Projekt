@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 from .models import Knjiga,Autor,Zanr,Posudba
 from django.utils import timezone   
 from .forms import KnjigaForm
-from django.db.models import Sum,Count
+from django.db.models import Sum
 def popis_knjiga(request):
     knjige=Knjiga.objects.all()
     autori=Autor.objects.all()
@@ -16,7 +16,7 @@ def popis_knjiga(request):
     if zanr_id:
         knjige=knjige.filter(zanr_id=zanr_id)
     stanje=request.GET.get('stanje')
-    if stanje=='dostupno':
+    if stanje=='dostupno':  
         knjige=knjige.exclude(kolicina=0)
     return render(request,'knjiznica/popis_knjiga.html',{
         'knjige':knjige,
@@ -37,7 +37,7 @@ def registracija(request):
     return render(request,'knjiznica/registracija.html',{'form':form})
 def is_admin(user):
     return user.is_staff
-@login_required #dekoratori
+@login_required 
 @user_passes_test(is_admin)
 def dodaj_knjigu(request):
     if request.method=='POST':
@@ -98,18 +98,17 @@ def moje_posudbe(request):
     aktivne_posudbe=Posudba.objects.filter(
         korisnik=request.user,
         je_vraceno=False
-    ).select_related('knjiga')
+    )
     povijest_posudbi=Posudba.objects.filter(
         korisnik=request.user,
         je_vraceno=True
-    ).select_related('knjiga')
+    )
     return render(request,'knjiznica/moje_posudbe.html',{
         'aktivne_posudbe':aktivne_posudbe,'povijest_posudbi':povijest_posudbi,
     })
 def is_zaposlenik(user):
     return user.is_authenticated and (
-        user.is_staff or
-        (hasattr(user,'profile') and user.profile.je_zaposlenik))
+        user.is_staff or user.profile.je_zaposlenik)
 @login_required
 @user_passes_test(is_zaposlenik)
 def statistika(request):

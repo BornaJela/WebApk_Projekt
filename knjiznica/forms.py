@@ -4,6 +4,6 @@ class KnjigaForm(forms.ModelForm):
     class Meta:
         model=Knjiga
         fields=['naslov','autor','zanr','godina','opis','kolicina']
-        widgets={
+        widgeti={
             'opis':forms.Textarea(attrs={'rows':4}),
         }
